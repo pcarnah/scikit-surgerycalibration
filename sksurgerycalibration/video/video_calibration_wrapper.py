@@ -882,8 +882,8 @@ def stereo_handeye_calibration(l2r_rmat: np.ndarray,
         tvec[1][0] = x_1[10]
         tvec[2][0] = x_1[11]
         l2r = vu.extrinsic_vecs_to_matrix(rvec, tvec)
-        l2r_rmat = l2r[0:3, 0:3]
-        l2r_tvec = l2r[0:3, 3]
+        l2r_rmat[:3, :3] = l2r[0:3, 0:3]
+        l2r_tvec[:, 0]  = l2r[0:3, 3]
 
         left_camera_matrix[0][0] = x_1[12]
         left_camera_matrix[1][1] = x_1[13]
@@ -1027,7 +1027,7 @@ def stereo_calibration_extrinsics(common_object_points,
                               override_l2r_tvec),
                         method='lm',
                         x_scale='jac',
-                        verbose=0)
+                        verbose=2)
 
     LOGGER.info("Stereo Re-Calibration: status=%s", str(res.status))
     LOGGER.info("Stereo Re-Calibration: success=%s", str(res.success))
